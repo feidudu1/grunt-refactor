@@ -36,13 +36,27 @@ module.exports = function (grunt) {
                     ext: '.js'
                 }]
             }
-        }
+        },
+
+        less: {
+            sim: {
+                files: [{
+                    expand: true, // 设为true以下才生效？
+					cwd: '<%= assetsPath %>',
+					src: ['*.less','!_*.less'],
+					dest: '<%= assetsPath %>/debug',
+                    ext: '.css'
+                }]
+            }
+        },
 
     });
 
     //告诉grunt我们将使用插件
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-less');
+
 
     //告诉grunt当我们在终端中输入grunt时需要做些什么(注意先后顺序)
-    grunt.registerTask('default',['uglify']);
+    grunt.registerTask('default',['uglify','less']);
 };
