@@ -50,13 +50,25 @@ module.exports = function (grunt) {
             }
         },
 
+        cssmin: {
+            sim: {
+                expand: true,
+				cwd: '<%= assetsPath %>/debug',
+				src: ['*.css'],
+				dest: '<%= distPath %>',
+                ext: '.min.css'
+            }
+        },
+
     });
 
     //告诉grunt我们将使用插件
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+
 
 
     //告诉grunt当我们在终端中输入grunt时需要做些什么(注意先后顺序)
-    grunt.registerTask('default',['uglify','less']);
+    grunt.registerTask('default',['uglify','less','cssmin']);
 };
