@@ -1,0 +1,56 @@
+{
+  "global_config": {
+    "domain": "http://wapa.m.mockuai.com",
+    "site_name": "demo商城",
+    "site_keywords": "魔筷科技,云服务,mockuai",
+    "site_description": "魔筷云服务，1小时让您拥有您自己的电商App",
+    "app_config":{
+      "app_name":"mockuai_demo",
+      "app_pwd":"84ef0ca439e44fa93c4375ff94b420c7",
+      "app_key":"5b036edd2fe8730db1983368a122fb45",
+      "scheme":"mockuai",
+      "tel":"",
+      "service_url":"",
+      "index_url":"http://tms.taojae.com/service/json?file=mockuai_demoindex&type=jsonp",
+      "about_url":"http://demo.m.mockuai.com/about.html",
+      "deliveryStore": true,
+      "without_bind_tel": false
+    },
+    "wx_share_account": {
+      "APPID":"wxcd0e027c2b1a26fc",
+      "wx_domain":"http://demo.m.mockuai.com",
+      "APPSecret":"da9405db773450793d002ef3efc5e2c8"
+    },
+    "wx_share_config": {
+      "custom_wx_share": "true",
+      "custom_wx_title": "",
+      "custom_wx_desc": "",
+      "custom_wx_logo": "http://img01.taojae.com/party/d9c7926e5669b368809540393e05dbee.png"
+    },
+    "wx_pay_account": {
+      "APPID":"",
+      "wx_domain":"",
+      "APPSecret":""
+    },
+    "wx_login_account": {
+      "APPID":"wx1798992a7488963c",
+      "wx_domain":"http://common2.mockuai.com",
+      "APPSecret":""
+    },
+    "colors": {
+      "main_color": "#ff4b55"
+    },
+    "placeholders":{
+      "size_1x1":"http://img01.taojae.com/party/0834ccdcbc446e95037597fa397cd53d.png",
+      "size_2x1":"http://img01.taojae.com/party/ca77274957a1de4b2354a2d99586114f.png",
+      "size_3x1":"http://img01.taojae.com/party/6fed1b62e7e47421a9415d68982a0d9f.png",
+      "category":"http://img01.taojae.com/party/c6664cc235588005ada895ebfcc74fe0.png"
+    },
+    "pay_type":{
+      "alipay":true,
+      "weixinpay":true,
+      "unionpay":true,
+      "tongtongpay": true
+    }
+  }
+}
