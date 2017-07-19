@@ -1,3 +1,5 @@
+// 业务：common中views中的jade文件依赖普通grunt时生成的html文件夹
+
 //包装函数
 module.exports = function (grunt) {
 
@@ -13,6 +15,7 @@ module.exports = function (grunt) {
         assetsPath: 'assets',
         htmlPath: 'html',
         debugPath: 'assets/debug',
+        beta: '',
 
 
         // 多店
@@ -91,6 +94,21 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+        },
+
+        copy: {
+            releaseHtml: {
+                expand: true,
+                cwd: 'html',
+                src: '**',
+                dest: '<%= beta %>/',
+            },
+            releaseAssets: {
+                expand: true,
+                cwd: '<%= distPath %>',
+                src: '**',
+                dest: '<%= beta %>/build/',
+            }
         }
 
     });
@@ -101,15 +119,17 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+
 
     //告诉grunt当我们在终端中输入grunt时需要做些什么(注意先后顺序)
-    grunt.registerTask('sim', ['clean','uglify','replace','less','cssmin']);
+    grunt.registerTask('sim', ['clean','uglify','replace','less','cssmin','copy']);
     grunt.registerTask('default','start deploy(main entry)', function () {
         var biz = grunt.option('biz');
         var jsonFile = biz ? biz + '_config.json' : 'config.json';  // 指定商城的配置文件（configjson文件夹）
-        var beta = biz ? 'app-' + biz : 'm.mockuai.com';   // 指定打包生成的包名，在publish文件夹下面
+        var betaPath = biz ? 'app-' + biz : 'm.mockuai.com';   // 指定打包生成的包名，在publish文件夹下面
         grunt.config.set('cfg', grunt.file.readJSON('configjson/' + jsonFile));
-        grunt.config.set('betaPath','publish/' + beta);
+        grunt.config.set('beta','publish/' + betaPath);
         grunt.task.run(['sim']);
     });
 };
