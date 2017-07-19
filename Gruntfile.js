@@ -17,7 +17,6 @@ module.exports = function (grunt) {
         debugPath: 'assets/debug',
         beta: '',
 
-
         // 多店
         msrcPath: 'm_src',
 
@@ -26,7 +25,7 @@ module.exports = function (grunt) {
             sim: {
                 files: [{
                     expand: true,
-                    cwd: '<%= srcPath %>',
+                    cwd: '<%= distPath %>',
                     src: ['*.js'],
                     dest: '<%= distPath %>',
                     ext: '.js'
@@ -94,6 +93,16 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            js: {
+                src: ['<%= srcPath %>/*.js'],
+                dest: '<%= distPath %>/',
+                replacements: [
+                    {
+                        from: /@SITENAME/g,
+                        to: '<%= cfg.global_config.site_name || "首页" %>'
+                    }
+                ]
+            }
         },
 
         copy: {
@@ -123,13 +132,47 @@ module.exports = function (grunt) {
 
 
     //告诉grunt当我们在终端中输入grunt时需要做些什么(注意先后顺序)
-    grunt.registerTask('sim', ['clean','uglify','replace','less','cssmin','copy']);
+    grunt.registerTask('basic', ['clean','replace','less','copy']);
+    grunt.registerTask('prod', ['uglify','cssmin']);
+    grunt.registerTask('pub-beta', ['copy']);
     grunt.registerTask('default','start deploy(main entry)', function () {
+        var env = grunt.option('env') || 'online';
         var biz = grunt.option('biz');
+
+        var defaultHost = 'm.mockuai.com';
+        switch (env) {
+            case 'test':
+                defaultHost = 'wapatest.m.mockuai.net';
+                break;
+            case 'wapa':
+                defaultHost = 'wapa.m.mockuai.net';
+                break;
+        }
+
         var jsonFile = biz ? biz + '_config.json' : 'config.json';  // 指定商城的配置文件（configjson文件夹）
-        var betaPath = biz ? 'app-' + biz : 'm.mockuai.com';   // 指定打包生成的包名，在publish文件夹下面
+        var betaPath = biz ? 'app-' + biz : defaultHost;   // 指定打包生成的包名，在publish文件夹下面
         grunt.config.set('cfg', grunt.file.readJSON('configjson/' + jsonFile));
         grunt.config.set('beta','publish/' + betaPath);
-        grunt.task.run(['sim']);
+
+        var debugApi = '';
+        switch (env) {
+            // 测试环境
+            case 'test':
+                debugApi = 'http://10.10.10.13:8090/';
+                break;
+            // 预发环境
+            case 'wapa':
+                debugApi = 'http://apiwapa.mockuai.com/';
+                break;
+        }
+        debugApi && grunt.config.set('debugApi',debugApi);
+
+        // 开发环境和生产环境配置
+        var developEnv =  typeof grunt.option('dev') != 'undefined';
+        if (!developEnv) {
+            grunt.task.run(['basic','prod','pub-beta']);  // 生产环境
+        }else {
+            grunt.task.run(['basic','pub-beta']);   // 开发环境
+        }
     });
 };
