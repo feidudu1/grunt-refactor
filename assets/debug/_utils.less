@@ -1,0 +1,171 @@
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.clearfix { display: inline-block; }
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+.none{
+  display: none!important;
+}
+
+.float-left{
+  float: left!important;
+}
+.float-right{
+  float: right!important;
+}
+
+.delay-animation {
+  -webkit-transition-property: all;
+  -webkit-transition-duration: 0.25s, 0.45s;
+  -webkit-transition-timing-function: ease;
+}
+
+.single-line{
+  .single-ellipsis();
+}
+
+
+//基本控件样式-按钮
+//主题色背景色
+.yang-btn-red-solid(@width:90px, @height: 34px, @font-size:14px,@color:#ff4b55){
+    width:@width;
+    height: @height;
+    line-height: @height;
+    .border-radius(3px);
+    color: #fff;
+    text-align: center;
+    background-color: @color;
+    font-size: @font-size;
+    border:none;
+}
+.yang-btn-red-dashed(@width:90px, @height:34px, @font-size:14px) {
+    width:@width;
+    height: @height;
+    line-height: @height;
+    .border-radius(3px);
+    color: #ff4b55;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ff4b55;
+    font-size: @font-size;
+}
+.yang-btn-line-solid(@width:100%, @height: 43px, @font-size:14px, @color:#ff4b55,@border-radius: @height/2){
+    width:@width;
+    height: @height;
+    line-height: @height;
+    .border-radius(@border-radius);
+    color: #fff;
+    text-align: center;
+    background-color: @color;
+    font-size: @font-size;
+    display: inline-block;
+    border: none;
+}
+.yang-btn-line-dashed(@width:100%, @height: 43px, @font-size:14px){
+    width:@width;
+    height: @height;
+    line-height: @height;
+    .border-radius(@height/2);
+    color: #ff4b55;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #ff4b55;
+    font-size: @font-size;
+    display: inline-block;
+}
+.yang-btn-bottom-solid(@width:130px*@px6, @height: 50px, @font-size:14px){
+    width:@width;
+    height: @height;
+    line-height: @height;
+    color: #fff;
+    text-align: center;
+    background-color: #ff4b55;
+    font-size: @font-size;
+    display: inline-block;
+    border: none;
+}
+
+.btn(@color, @width: 80px, @height: 35px){
+  width:@width;
+  height: @height;
+  border-radius: 3px;
+  color: #fff;
+  text-align: center;
+  background-color: @color;
+  border: 1px solid @color;
+}
+.btn-border(@color, @width: 80px, @height: 35px){
+  width:@width;
+  height: @height;
+  border-radius: 3px;
+  color: @color;
+  text-align: center;
+  background-color: #fff;
+  border: 1px solid @color;
+}
+.btn-main-red(@width: 80px, @height: 35px){
+  .btn(@color: #ff4b55, @width, @height);
+}
+.btn-main-white(@width: 80px, @height: 35px){
+  .btn-border(@color: #ff4b55, @width, @height);
+}
+.btn-main-gray(@width: 80px, @height: 35px){
+  .btn(@color: #ccc, @width, @height);
+}
+.btn-main-gray-hollow(@width: 80px, @height: 35px){
+  .btn-border(@color: #666, @width, @height);
+}
+.btn-main-lightgray-hollow(@width: 80px, @height: 35px){
+  .btn-border(@color: #ccc, @width, @height);
+}
+
+
+.btn-allRow(@color,@height,@marginTop,@marginLeft){
+  margin: @marginTop @marginLeft 0 @marginLeft;
+  line-height: @height;
+  border: 1px solid @color;
+  color: #fff;
+  background-color: @color;
+  text-align: center;
+  border-radius: 3px;
+  display: block;
+}
+.btn-border-allRow(@color,@height,@marginTop,@marginLeft){
+  margin: @marginTop @marginLeft 0 @marginLeft;
+  line-height: @height;
+  border: 1px solid @color;
+  color: @color;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  display: block;
+}
+.btn-gray-allRow(@height,@marginTop,@marginLeft){
+  .btn-allRow(@color:#666,@height,@marginTop,@marginLeft);
+}
+.btn-lightgray-allRow(@height,@marginTop,@marginLeft){
+  .btn-allRow(@color:#ccc,@height,@marginTop,@marginLeft);
+}
+.btn-main-white-allRow(@height,@marginTop,@marginLeft){
+  .btn-border-allRow(@color:#ff4b55,@height,@marginTop,@marginLeft);
+}
+.btn-main-red-allRow(@height,@marginTop,@marginLeft){
+  .btn-allRow(@color: #ff4b55,@height,@marginTop,@marginLeft);
+}
+
+.btn-main-getcode(@width: 90px, @height: 30px){
+  width:@width;
+  height: @height;
+  border-radius: 3px;
+  text-align: center;
+  background-color: #eee;
+  color: #999;
+  border: 1px solid #eee;
+}

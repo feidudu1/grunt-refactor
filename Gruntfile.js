@@ -8,6 +8,7 @@ module.exports = function (grunt) {
 
         //获取package.json的信息
         pkg: grunt.file.readJSON('package.json'),
+        modulesMap: grunt.file.readJSON('.modulecfg'),
         distPath: 'build',
         // 单店
         srcPath: 'src',
@@ -19,6 +20,23 @@ module.exports = function (grunt) {
 
         // 多店
         msrcPath: 'm_src',
+
+        customconcat: {
+            options: {
+                header: ['src/mod/handle.js','src/mod/deliver.js'],
+                footer: []
+            },
+            main: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcPath %>/',
+                    src: '*.js',
+                    dest: '<%= distPath %>/',
+                    ext: '.js',
+                    extDot: 'first'
+                }],
+            }
+        },
 
         //uglify插件的配置信息
         uglify: {
@@ -73,8 +91,27 @@ module.exports = function (grunt) {
         },
 
         replace: {
-            html: {
+            insertModuleList: {
                 src: ['<%= viewPath %>/*.html'],
+                dest: '<%= htmlPath %>/',
+                replacements: [
+                    {   // 模块加载替换成script引用<!--//insert-modules: -->
+                        from: /\<\!\-\-\/\/insert\-modules:([^\>]+)\-\-\>/g,
+                        to: function (matchedWord, index, fullText, regexMatches) {
+                            var modulesMap = grunt.config.data.modulesMap;
+                            var targetModules = regexMatches[0].split(',');
+                            var srcModules = [];
+                            targetModules.map(function (v) {
+                                srcModules.push(modulesMap[v]);
+                            });
+
+                            return '<script src="' + 'http://assets.mockuai.com/min?' + srcModules.join(',') + '"></script>';
+                        }
+                    }
+                ]
+            },
+            html: {
+                src: ['<%= htmlPath %>/*.html'],
                 dest: ['<%= htmlPath %>/'],
                 replacements: [
                     {
@@ -111,6 +148,17 @@ module.exports = function (grunt) {
                 cwd: 'html',
                 src: '**',
                 dest: '<%= beta %>/',
+                options: {
+                    process: function (content, srcpath) {
+                        var version = grunt.config.data.pkg.version;
+
+                        // todo 增加debug版本的部署
+                        return content.replace(/\.\.\/data/g, './data')
+                            .replace(/\.\.\/build\/([^"\?]+)\??[^"]*/g, './build/$1?v=' + version)
+                            .replace(/\.\.\/src/g, './build')
+                            .replace(/\.debug\./g, '.');
+                    }
+                }
             },
             releaseAssets: {
                 expand: true,
@@ -130,6 +178,40 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
+    // 合并，并且支持添加通用的头尾js文件集
+    grunt.registerMultiTask('customconcat','custom concat.', function () {
+        var options = this.options({
+            header: [],
+            footer: [],
+            separator: grunt.util.linefeed,
+        });
+        var headerFiles;
+        var footerFiles;
+        if (Array.isArray(options.header)) {
+            headerFiles = options.header;
+        }
+        if (Array.isArray(options.footer)) {
+            footerFiles = options.footer;
+        }
+
+        this.files.forEach(function (f) {
+            f.src = [].concat(headerFiles, f.src, footerFiles);
+            var src = f.src.filter(function (filepath) {
+                if (!grunt.file.exists(filepath)) {
+                    grunt.log.warn('Source file"' + filepath + '" not found.');
+                    return false;
+                }else {
+                    return true;
+                }
+            });
+            if (src.length === 0) {
+                grunt.log.warn('Destination(' + f.dest + ') not written because src files were empty.');
+                return;
+            }
+            // 合并操作
+
+        })
+    });
 
     //告诉grunt当我们在终端中输入grunt时需要做些什么(注意先后顺序)
     grunt.registerTask('basic', ['clean','replace','less','copy']);
@@ -138,7 +220,6 @@ module.exports = function (grunt) {
     grunt.registerTask('default','start deploy(main entry)', function () {
         var env = grunt.option('env') || 'online';
         var biz = grunt.option('biz');
-
         var defaultHost = 'm.mockuai.com';
         switch (env) {
             case 'test':

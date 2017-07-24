@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+    <meta charset="utf-8" />
+    <meta name="keywords" content="@SITEKEYWORDS"/>
+    <meta name="description" content="@SITEDESCRIPTION"/>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no,email=no" name="format-detection" />
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"/>
+    <title>登录</title>
+    <link href="../build/login.debug.css" rel="stylesheet" type="text/css" />
+    <link href="http://assets.mockuai.com/mk/lib-notification/1.1.1/notification.css" rel="stylesheet" type="text/css" />
+    <link href="http://assets.mockuai.com/mk/ctrl-topbar/1.0.0/topbar.css" rel="stylesheet" type="text/css" />
+    <link href="http://assets.mockuai.com/mk/ctrl-bottombar/1.2.8/bottombar.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div class="container">
+    <div class="main">
+        <form id="login" autocomplete="off">
+            <div class="form-items">
+                <div class="form-item">
+                    <label class="label">账号</label>
+                    <div class="input-box">
+                        <input id="username" type="text" placeholder="请输入邮箱/手机号" autocomplete="off" required="true"/>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="label">密码</label>
+                    <div class="input-box">
+                        <input class="login-passwd" id="password" type="password" placeholder="请输入您的密码"  autocomplete="off" required="true"/>
+                    </div>
+                    <label class="select-visual" for="visual"></label>
+                    <input type="checkbox" id="visual"/>
+                    <div class="visual"></div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <a href="javascript:;" class="form-icon" id="submit">登录</a>
+                <p class="links">
+                    <a class="register j-register" href="javascript:;" style="display: none">快速注册</a>
+                    <a class="forget-password float-right" href="getpassword.html">忘记密码？</a>
+                </p>
+            </div>
+
+            <div id="wx-login" style="display: none;">
+                <a href="wx-login.html" style="padding: 15px; color: #1fa5ff; font-size: 14px; text-align: center; text-decoration: underline; display: block;">微信登录</a>
+            </div>
+        </form>
+
+        <div class="third-login">
+            <div class="tips">
+                <p>
+                    <span>第三方账号登录</span>
+                </p>
+            </div>
+            <ul>
+                <!--<li id="login-sina" onclick="callLogin('sina');"><a href="javascript:;"><span class="icon-sina"></span><span>新浪微博</span></a></li>-->
+                <li id="login-wechat" class="wechat"><a href="wx-login.html"><span class="icon-wechat"></span><span>微信</span></a></li>
+                <!--<li id="login-qq" onclick="callLogin('qq')"><a href="javascript:;"><span class="icon-tencent"></span><span>QQ</span></a></li>-->
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="third-login-box">
+    <div id="wb_connect_btn" ></div>
+    <div id="qq_connect_btn"></div>
+</div>
+<script src="http://assets.mockuai.com/3rd/zepto.min.js"></script>
+<!--//insert-modules:lib-api,lib-login,lib-storage,ctrl-topbar-->
+<!--//insert-modules:lib-httpurl,lib-notification-->
+<!-- QQ第三方登录JS导入 -->
+<!--<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="@QQ_APPID" data-redirecturi="@QQ_redirectURI" charset="utf-8"></script>-->
+<!--<script type = "text/javascript" >-->
+    <!--QC.Login({//按默认样式插入QQ登录按钮-->
+        <!--btnId: "qq_connect_btn",	//插入按钮的节点id-->
+        <!--size: "C_S"-->
+    <!--});-->
+<!--</script>-->
+
+
+<!-- Sina第三方登录JS导入 -->
+<!--<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=@SINA_APPKEY" type="text/javascript" charset="utf-8"></script>-->
+<!--<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=1166443256" type="text/javascript" charset="utf-8"></script>-->
+<!--<script>-->
+    <!--WB2.anyWhere(function (W) {-->
+        <!--W.widget.connectButton({-->
+            <!--id: "wb_connect_btn",-->
+            <!--type: '3,2',-->
+            <!--callback: {-->
+                <!--login: function (o) { //登录后的回调函数-->
+                    <!--alert("login: " + o.screen_name)-->
+                <!--},-->
+                <!--logout: function () { //退出后的回调函数-->
+                    <!--alert('logout');-->
+                <!--}-->
+            <!--}-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
+
+<!--<script type="text/javascript">-->
+    <!--function callLogin(type){-->
+        <!--if(type == 'sina'){-->
+            <!--return $('#wb_connect_btn a').trigger('click');-->
+        <!--}-->
+        <!--if(type == 'qq'){-->
+            <!--return $('#qq_connect_btn a').trigger('click');-->
+        <!--}-->
+    <!--}-->
+<!--</script>-->
+<script src="../build/login.debug.js"></script>
+</body>
+</html>

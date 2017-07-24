@@ -1,0 +1,117 @@
+//*** 滑动开关 ***
+//参数含义
+//@width: 开关宽度
+//@height: 开关高度
+//@bgColor: 开关状态为on时的背景颜色
+//@borderColor: 开关状态为off时的边框颜色
+.C_wiperSwitch(@R: 22, @bgColor: #ff4a54, @borderColor:#e5e5e5){
+  width: @R*1px;
+  height: @R*1px;
+  position: relative;
+  display: inline-block;
+
+  .switch-box{
+    position: relative;
+    right: @R*1px;
+    width: @R*1px;
+    height: @R*1px;
+  }
+
+  input[type="checkbox"],label,i{
+    border-radius:@R*1px;
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    outline:none;
+  }
+  i{
+    display: inline-block;
+    padding-right: @R*1px;
+    cursor: pointer;
+    box-sizing: content-box;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5);
+    transition: all ease .2s;
+    -moz-transition: all ease .2s;
+    -webkit-transition: all ease .2s;
+    -o-transition: all ease .2s;
+    &:before{
+      display: block;
+      content: '';
+      width: @R*1px;
+      height: @R*1px;
+      border-radius: @R*1px;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+  }
+  input[type="checkbox"]:checked +i {
+    padding-right: 0;
+    padding-left: @R*1px;
+    background: @bgColor;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 40px @bgColor;
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 40px @bgColor;
+  }
+}
+
+
+//加载
+.C_loading{
+  .load1 .loader,
+  .load1 .loader:before,
+  .load1 .loader:after {
+    background: #ccc;
+    -webkit-animation: load1 1s infinite ease-in-out;
+    animation: load1 1s infinite ease-in-out;
+    width: 1em;
+    height: 4em;
+  }
+  .load1 .loader:before,
+  .load1 .loader:after {
+    position: absolute;
+    top: 0;
+    content: '';
+  }
+  .load1 .loader:before {
+    left: -1.5em;
+  }
+  .load1 .loader {
+    text-indent: -9999em;
+    margin: 40% auto;
+    position: relative;
+    font-size: 11px;
+    -webkit-animation-delay: 0.16s;
+    animation-delay: 0.16s;
+  }
+  .load1 .loader:after {
+    left: 1.5em;
+    -webkit-animation-delay: 0.32s;
+    animation-delay: 0.32s;
+  }
+  @-webkit-keyframes load1 {
+    0%,
+    80%,
+    100% {
+      box-shadow: 0 0 #FFF;
+      height: 4em;
+    }
+    40% {
+      box-shadow: 0 -2em #ffffff;
+      height: 5em;
+    }
+  }
+  @keyframes load1 {
+    0%,
+    80%,
+    100% {
+      box-shadow: 0 0 #FFF;
+      height: 4em;
+    }
+    40% {
+      box-shadow: 0 -2em #ffffff;
+      height: 5em;
+    }
+  }
+}

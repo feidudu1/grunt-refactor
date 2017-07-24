@@ -1,15 +1,215 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="../build/index.min.css">
-        <title>@SITENAME</title>
+<head>
+    <meta charset="utf-8" />
+    <meta name="keywords" content="@SITEKEYWORDS"/>
+    <meta name="description" content="@SITEDESCRIPTION"/>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no,email=no" name="format-detection" />
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"/>
+    <link rel="stylesheet" href="http://assets.mockuai.com/mk/ctrl-searchbar/1.0.9/searchbar.css"/>
+    <link rel="stylesheet" href="http://assets.mockuai.com/mk/ctrl-bottombar/1.2.8/bottombar.css"/>
+    <link href="../build/index.debug.css" rel="stylesheet" type="text/css" />
+    <title>@SITENAME</title>
+</head>
+<body>
 
-    </head>
-    <body>
-        <div class="">
-            例子栗子的释放空间；
+<div id="search-bar" class="ctrl-search"></div>
+
+
+<!--tpl-->
+<!--注：searchbar 和 slider必须同时使用，不过slider可以单独使用-->
+<script type="text/template" id="tpl-slides">
+    <div class="banner">
+        <div class="slider-box slider-box-<%= indexNum %>">
+            <div class="slider-outer">
+                <div id="slides" class="slider-wrap">
+                    <% _.each(itemList, function (item,index) { %>
+                    <a class="slider-item" style="width:<%= w %>px;" href="<%= item.targetUrl %>" data-interaction="index|banner|1|<%= index%>"><img class="lazy img" src="@size_2x1" dataimg="<%= item.imageUrl %>"/></a>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="slider-status slider-status-<%= indexNum %>"></div>
         </div>
-    </body>
+    </div>
+</script>
 
+
+<!--4列导航-->
+<script type="text/template" id="tpl-cate-navs">
+    <div class="navigator">
+        <!--类目导航-->
+        <div id="cate-navs" class="cate-nav <%if(itemList.length>4){%>doubleRow<%}%>">
+            <% _.each(itemList, function (item,index) { %><a href="<%= item.targetUrl %>" data-interaction="index|nav|1|<%= index%>">
+                <span class="img lazy" dataimg="<%= item.imageUrl %>"></span><span class="name"><%= item.text%></span>
+            </a><% }); %>
+        </div>
+    </div>
+</script>
+
+
+<!--divider blank-->
+<script type="text/template" id="tpl-divider-blank">
+    <div class="divider-blank" style="height:<%if(typeof height != 'undefined'){%><%= (height/2)||5%>px;<%}else{%>5px;<%}%><%if(typeof bgColor != 'undefined'){%>background-color:<%= bgColor||'#eee' %>;<%}else{%>background-color:#eee;<%}%>" ></div>
+</script>
+
+<!--component title-->
+<script type="text/template" id="tpl-component-title">
+    <div class="component-title" style="background-color: <%= bgColor || '#ffffff'%>">
+        <a href="<%= targetUrl || 'javascript:;'%>">
+            <div class="h2"><h2 style="border-color:<%= borderColor || '#ff4b55' %>;"><%= title %><% if(description){%><span class="sec-title"><%= description %></span><%}%><span class="float-right"></span></h2></div>
+        </a>
+    </div>
+</script>
+
+<!--secKill-->
+<script type="text/template" id="tpl-secKill">
+    <div class="sec-box">
+        <div class="sec-header">
+            <% if (typeof targetUrl != 'undefined') { %>
+            <a href="<%= targetUrl%>">
+                <% } %>
+                <div class="h1"><%= screening %></div>
+                <% if (typeof description != 'undefined') {%>
+                <div class="h2"><%= description %></div>
+                <% } %>
+
+                <% if(typeof startTime != 'undefined' && typeof endTime != 'undefined'){ %>
+                <div class="time">
+                    <span class="time-tip">本场剩余</span>
+                    <div class="numbers">
+                        <span class="box hour">00</span><span>:</span><span class="box minute">00</span><span>:</span><span class="box second">00</span>
+                    </div>
+                </div>
+                <% } %>
+
+                <%if(typeof targetText != 'undefined'){%>
+                <span class="float-right"><%= targetText %></span>
+                <%}%>
+                <span class="go-out"></span>
+                <% if (typeof targetUrl != 'undefined') { %>
+            </a>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="sec-kill">
+        <div class="sec-body">
+            <% _.each(itemList, function (item,index) { %>
+            <a href="<%= item.targetUrl%>">
+                <div class="sec-pro">
+                    <div class="pro-img">
+                        <img class="img lazy" src="@size_1x1" dataimg="<%= item.imageUrl %>" alt="<%= item.text %>"/>
+                        <% if(item.wirelessPrice != item.marketPrice){%>
+                        <div class="tag">
+                            <span></span><span><% if(item.tag){%><%= item.tag %><%}else{%><%= ((item.wirelessPrice/item.marketPrice)*10).toFixed(1) %>折<%}%></span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <p>&yen;<span><%= HDL.price(item.wirelessPrice) %></span></p>
+                </div>
+            </a>
+            <% }); %>
+        </div>
+    </div>
+</script>
+
+<!--marquee-->
+<script type="text/template" id="tpl-marquee">
+    <div class="marquee-v-box">
+        <div class="label" style="background-image: url(<%= label %>)"></div>
+        <div class="marquee-box marquee-wrapper">
+            <div class="marquee-list">
+                <% _.each(itemList, function (item,index) { %>
+                <a class="marquee-item" href="<%= item.targetUrl %>"><%= item.text%></a>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--images-->
+<script type="text/template" id="tpl-images">
+    <%if(typeof targetUrl != 'undefined'){%>
+    <a href="<%= targetUrl||'javascript:;' %>" class="picture">
+        <%}%>
+        <img class="lazy img" src="@size_2x1" dataimg="<%= imageUrl %>" alt="图片"/>
+        <%if(typeof targetUrl != 'undefined'){%>
+    </a>
+    <%}%>
+</script>
+
+<!--divider line-->
+<script type="text/template" id="tpl-divider-line">
+    <div class="divider-line" style="<% if(typeof topPadding != 'undefined'){%>padding-top: <%= (topPadding/2)||0 %>px;<%}%><%if(typeof bottomPadding != 'undefined'){%>padding-bottom: <%= bottomPadding/2 %>px;<%}%><%if(typeof leftPadding != 'undefined'){%>padding-left: <%= (leftPadding/2)||0 %>px;<%}%><%if(typeof rightPadding != 'undefined'){%>padding-right: <%= (rightPadding/2)||0 %>px;<%}%>background-color: #fff;">
+        <div class="divider-border" style="border-top: 1px <%if(typeof type != 'undefined'){%><%= type %><%}else{%> solid <%}%> #ccc;"></div>
+    </div>
+</script>
+
+<!--card-->
+<script type="text/template" id="tpl-cards">
+    <%if(type){%>
+        <div class="<%= type %> <%if(needBorder){%>with-border<%}%>">
+            <% _.each(itemList, function (item, index) { %>
+            <a style="background-image: url(@size_2x1)" class="img lazy card card-<%= index + 1 %> <%if(item.withBorder){%>with-border<%}%>" href="<%= item.targetUrl %>" dataimg="<%= item.imageUrl %>"  data-interaction="index|card|1|<%= index%>"></a>
+            <% }); %>
+        </div>
+    <%}%>
+</script>
+
+<script type="text/template" id="tpl-products">
+    <div class="products">
+        <% if(productType == 1){%>
+        <ul class="item-lists-vertical">
+            <% _.each(productList, function (item, index) { %><li class="item-list">
+                <a href="<%= item.targetUrl%>">
+                    <div class="pro-img"><img class="lazy img" src="@size_1x1" dataimg="<%= item.imageUrl %>" alt=""/></div>
+                    <div class="pro-body">
+                        <p class="<% if(item.wirelessPrice == item.marketPrice){%> only-price <%}%>"><%= item.text %></p>
+                        <div class="price-box">
+                            <span class="wireless-price"><span class="mark">&yen;</span><%= HDL.price(item.wirelessPrice)%></span>
+                            <% if(item.wirelessPrice != item.marketPrice){%>
+                            <span class="discount"><span></span><span><%= Number(item.wirelessPrice*10/item.marketPrice).toFixed(1) %>折</span></span><br/>
+                            <del class="market-price"><span class="mark">&yen;</span><%= HDL.price(item.marketPrice)%></del>
+                            <%}%>
+                        </div>
+                    </div>
+                </a>
+            </li><% }); %>
+        </ul>
+        <%}else{%>
+        <ul class="item-lists">
+            <% _.each(productList, function (item, index) { %><li class="item-list">
+                <a href="<%= item.targetUrl%>">
+                    <div class="pro-img"><img class="lazy img" src="@size_1x1" dataimg="<%= item.imageUrl %>" alt=""/></div>
+                    <div class="pro-body">
+                        <p><%= item.text %></p>
+                        <div class="price-box">
+                            <span class="wireless-price"><span class="RMB"></span><%= HDL.price(item.wirelessPrice)%></span>
+                            <% if(item.wirelessPrice != item.marketPrice){%>
+                            <span class="discount"><span></span><span><%= Number(item.wirelessPrice*10/item.marketPrice).toFixed(1) %>折</span></span>
+                            <div class="market-price single-show"><span class="mark">&yen;</span><%= HDL.price(item.marketPrice)%></div>
+                            <del class="market-price double-show"><span class="mark">&yen;</span><%= HDL.price(item.marketPrice)%></del>
+                            <%}%>
+                        </div>
+                    </div>
+                </a>
+            </li><% }); %>
+        </ul>
+        <%}%>
+    </div>
+</script>
+
+<!--//insert-modules:zepto,underscore,lib-httpurl,lib-gotop,lib-env-->
+<!--//insert-modules:lib-api,lib-slider,lib-lazyload,lib-storage,lib-login,ctrl-searchbar,lib-countdown,lib-marquee-->
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="http://assets.mockuai.com/mk/lib-weixinapi/1.1.2/weixinapi.js"></script>
+
+
+<script src="../src/mod/bottombar.js"></script>
+<script src="../build/index.debug.js"></script>
+</body>
 </html>

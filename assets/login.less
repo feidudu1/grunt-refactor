@@ -1,0 +1,220 @@
+@import "_func";
+@import "_reset";
+@import "_utils";
+@import "_var";
+
+
+.main h1{
+  text-align: center;
+  line-height: 45px;
+
+  background-color: @color-gray-f9;
+  border-bottom: 1px solid @border-color;
+  font-size: 36*@half;
+}
+.form-items{
+  padding-left: 24*@half;
+}
+.form-item{
+  background: #fff;
+  height: 100*@half;
+  line-height: 96*@half;
+  padding-right: 24*@half;
+  position: relative;
+  border-bottom: 1px solid @border-color;
+
+  .box();
+
+  .input-box{
+    .box-flex(1);
+    input{
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+
+  .label{
+    padding-right: 10px;
+    line-height: 96*@half;
+    font-size: 28*@half;
+
+    color:@color-gray-6;
+  }
+
+  input{
+    border:none;
+    padding:12px 0;
+    text-indent: 5px;
+
+    font-size: 28*@half;
+  }
+
+  .select-visual,input[type='checkbox']{
+    position: absolute;
+    top: 0;
+    right: 12px;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    width: 100*@half;
+    height: 100*@half;
+    display: inline-block;
+  }
+  input[type='checkbox']{
+    visibility: hidden;
+    z-index: 3;
+  }
+  .visual{
+    margin-left: 10px;
+    display: inline-block;
+    height: 100*@half;
+    line-height: 100*@half;
+    width: 100*@half;
+    z-index: 1;
+    background: url(@base64-icon-close-eye) center no-repeat;
+    background-size: 44*@half 44*@half;
+  }
+
+  input[type='checkbox']:checked + .visual{
+    background: url(@base64-icon-open-eye) center no-repeat;
+    background-size: 44*@half 44*@half;
+  }
+}
+.form-icon{
+  display: block;
+  line-height: 80*@half;
+  text-align: center;
+  letter-spacing: 4px;
+  .border-radius(3px);
+
+  padding:0 20*@half;
+  font-size: 30*@half;
+  border:1px solid @color-gray-d;
+  background-color:@color-gray-d;
+  color: #fff;
+
+
+  &.active{
+    border:1px solid @main-color;
+    background-color:@main-color;
+  }
+}
+.form-sub{
+  padding:40*@half 50*@half;
+
+  .links{
+    margin-top: 6*@half;
+    a{
+      color: @color-blue;
+      font-size: 24*@half;
+      display: inline-block;
+      padding: 20*@half 0;
+    }
+  }
+}
+.placeholder-color(@placeholder-color);
+
+
+//第三方登录
+
+.third-login{
+  display: none;
+  position: fixed;
+  bottom: 54*@half;
+  width: 100%;
+  height: auto;
+  padding: 0 24*@half;
+
+  .tips{
+    text-align: center;
+    position: relative;
+    border-top: 1px solid @color-gray-c;
+    p{
+      position: absolute;
+      width: 100%;
+      top: -20*@half;
+    }
+    span{
+      padding: 0 16*@half;
+      background-color: #fff;
+      font-size: 22*@half;
+      color: @color-gray-9;
+      display: inline-block;
+    }
+  }
+
+  ul{
+    &.in-weChat{
+      -moz-column-count:1; 	/* Firefox */
+      -webkit-column-count:1; /* Safari 和 Chrome */
+      column-count:1;
+
+      .wechat{
+        display: block;
+      }
+    }
+    width: 100%;
+    height: 140*@half;
+    font-size: 0;
+    -moz-column-count:2; 	/* Firefox */
+    -webkit-column-count:2; /* Safari 和 Chrome */
+    column-count:2;
+    margin-top: 50*@half;
+
+    .wechat{
+      display: none;
+    }
+
+    li{
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      a{
+        width: 100%;
+        height: auto;
+        display: block;
+        text-align: center;
+      }
+
+      span:first-child{
+        width: 100%;
+        height: 90*@half;
+        display: block;
+        margin-bottom: 20*@half;
+      }
+      span:last-child{
+        font-size: 24*@half;
+        color: @color-gray-6;
+        display: block;
+      }
+      .icon-sina{
+        background-image: url("http://img01.taojae.com/party/11565d7bc6094a1c4e0c6134e999752b.png");
+      }
+      .icon-wechat{
+        background-image: url("http://img01.taojae.com/party/ab9a17f25e0b998cc6eaac7636c0068b.png");
+      }
+      .icon-tencent{
+        background-image: url("http://img01.taojae.com/party/1bfc8c60c4d8d048ca5d77cb1e5dc5e7.png");
+      }
+      .icon-sina,.icon-wechat,.icon-tencent{
+        width: 100%;
+        height: 90*@half;
+        background-position: center;
+        background-size: 90*@half;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+}
+@media screen and (max-height: 500px){
+  .third-login{
+    position: relative;
+    top: 280*@half;
+    padding-bottom: 60*@half;
+  }
+}
+.third-login-box{
+  display: none;
+}
