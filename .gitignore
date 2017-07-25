@@ -2,3 +2,12 @@ node_modules/
 publish/
 build/
 html/
+app-common.zip
+app-common/cache_files/*
+!app-common/cache_files/demo*
+!app-common/cache_files/test*
+!app-common/cache_files/mkdyr*
+app-common/public/assets/
+app-common/public/js/
+app-common/public/mod/
+app-common/views

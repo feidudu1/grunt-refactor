@@ -16,7 +16,11 @@ module.exports = function (grunt) {
         assetsPath: 'assets',
         htmlPath: 'html',
         debugPath: 'assets/debug',
+        commonPath: 'app-common',
+        commonView: 'views',
         beta: '',
+
+        mainColor: '#ff4b55',
 
         // 多店
         msrcPath: 'm_src',
@@ -57,7 +61,16 @@ module.exports = function (grunt) {
                     dest: '<%= distPath %>',
                     ext: '.js'
                 }]
-            }
+            },
+            common: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= commonPath %>/public/js',
+                    src: ['*.js'],
+                    dest: '<%= commonPath %>/public/js',
+                    ext: '.js'
+                }]
+            },
         },
 
         less: {
@@ -87,6 +100,26 @@ module.exports = function (grunt) {
         clean: {
             sim: {
                 src: ['<%= assetsPath %>/debug','<%= distPath %>']
+            },
+            html: ['<%= htmlPath %>']
+        },
+
+        // 将html文件中的html文件转换成jade文件并放到app-common/views中
+        html2jade: {
+            options: {
+                noemptypipe: true,
+                donotencode: true
+            },
+            html: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= htmlPath %>',
+                    src: [
+                        '*.html'
+                    ],
+                    dest: '<%= commonPath %>/<%= commonView %>',
+                    ext: '.jade'
+                }]
             }
         },
 
@@ -139,6 +172,70 @@ module.exports = function (grunt) {
                         to: '<%= cfg.global_config.site_name || "首页" %>'
                     }
                 ]
+            },
+            debugOnline: {
+                src: ['<%= commonPath %>/lib/apps/configInfo.js'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /var currentEnv.*;/g,
+                        to: 'var currentEnv = \'online\';'
+                    }
+                ]
+            },
+            debugTest: {
+                src: ['<%= commonPath %>/lib/apps/configInfo.js'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /var currentEnv.*;/g,
+                        to: 'var currentEnv = \'test\';'
+                    }
+                ]
+            },
+            debugWapa: {
+                src: ['<%= commonPath %>/lib/apps/configInfo.js'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /var currentEnv.*;/g,
+                        to: 'var currentEnv = \'wapa\';'
+                    }
+                ]
+            },
+            commonJade: {
+                src: ['<%= commonPath %>/<%= commonView %>/**/*/.jade'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /@SITENAME/g,
+                        to: '#{api_data.biz_name}'
+                    }
+                ]
+            },
+            commonLess: {
+                src: ['<%= commonPath %>/public/assets/*.less'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: '@import "_var";',
+                        to: '@import "_var";\n@main-color: <%= mainColor %>;'
+                    }
+                ]
+            },
+            commonJs: {
+                src: ['<%= commonPath %>/public/js/*.js'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /["']@SITENAME['"]/g,
+                        to: 'Global.BIZ_NAME'
+                    },
+                    {
+                        from: /['"]@custom_wx_share['"]/g,
+                        to: 'Global.CUSTOM_WX_SHARE'
+                    }
+                ]
             }
         },
 
@@ -165,9 +262,32 @@ module.exports = function (grunt) {
                 cwd: '<%= distPath %>',
                 src: '**',
                 dest: '<%= beta %>/build/',
+            },
+            commonLess: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= assetsPath %>',
+                    src: ['*.less'],
+                    dest: '<%= commonPath %>/public/assets/'
+                }]
+            },
+            commonJs: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcPath %>',
+                    src: 'mod/*.js',
+                    dest: '<%= commonPath %>/public/'
+                }, {
+                    expand: true,
+                    cwd: '<%= distPath %>',
+                    src: '*.js',
+                    dest: '<%= commonPath %>/public/js/',
+                    rename: function (dest, src) {
+                        return dest + src.substring(src.lastIndexOf('/') + 1, src.indexOf('.')) + '.js';
+                    }
+                }]
             }
         }
-
     });
 
     //告诉grunt我们将使用插件
@@ -177,6 +297,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-html2jade');
+
 
     // 合并，并且支持添加通用的头尾js文件集
     grunt.registerMultiTask('customconcat','custom concat.', function () {
@@ -256,4 +378,27 @@ module.exports = function (grunt) {
             grunt.task.run(['basic','pub-beta']);   // 开发环境
         }
     });
+
+    // 自动化版本配置 －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+    grunt.registerTask('moveCommon', ['replace:insertModuleList', 'html2jade', 'customconcat', 'copy:commonJs', 'copy:commonLess']);
+    grunt.registerTask('replaceCommon', ['replace:commonJade', 'replace:commonLess', 'replace:commonJs']);
+
+    // 开发环境
+    // copy:commonjs 复制 mod 和 .debug.js 到 public 中
+    grunt.registerTask('commondev','start app-common build', function () {
+        var env = grunt.option('env') || 'online';
+        if (env) {
+            var upperEnv = env.replace(/(^|\s+)\w/g,function (s) { //正则匹配第一个字，无论该字前是空格还是改字就是第一个字
+                return s.toUpperCase();  // 方法的意思是所有字母大写 ，但s是首字母
+            });
+            var debugTask = 'replace:debug' + upperEnv; // replace:debugOnline
+            grunt.task.run([debugTask]);
+        }
+        grunt.task.run(['moveCommon', 'replaceCommon']);
+    });
+
+    // 生产环境
+    //
+    grunt.registerTask('prodCommon', ['uglify:common']);
+    grunt.registerTask('common', ['clean:html', 'replace:debugOnline', 'moveCommon', 'replaceCommon', 'prodCommon']);
 };
