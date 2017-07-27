@@ -210,7 +210,11 @@ module.exports = function (grunt) {
                     {
                         from: /@SITENAME/g,
                         to: '#{api_data.biz_name}'
-                    }
+                    },
+                    {
+                        from: /body(?![ \{])/,
+                        to: "body\n    include ../include/global.jade"
+                    },
                 ]
             },
             commonLess: {

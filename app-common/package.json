@@ -1,0 +1,23 @@
+{
+  "name": "app-common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node lib/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "method-override": "^2.3.9",
+    "morgan": "^1.8.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "compression": "^1.7.0",
+    "express": "^4.15.3",
+    "jade": "^1.11.0",
+    "less-middleware": "^2.2.1",
+    "serve-favicon": "^2.4.3"
+  }
+}
